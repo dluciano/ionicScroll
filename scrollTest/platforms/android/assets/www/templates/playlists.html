@@ -1,5 +1,8 @@
 <ion-view view-title="Playlists">
   <ion-content>
+      <ion-scroll zooming="true" direction="xy" style="width: 500px; height: 500px">
+          <div style="width: 2000px; height: 2000px; background: url('img/ionic.png') repeat"></div>
+      </ion-scroll>
     <ion-list>
       <ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">
         {{playlist.title}}
