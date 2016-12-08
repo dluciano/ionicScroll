@@ -1,12 +1,16 @@
 <ion-view view-title="Playlists">
     <ion-content>
-        <ion-scroll zooming="true" direction="x" style="width: 500px; height: 500px">
-            <div style="width: 2000px; height: 2000px; background: url('img/ionic.png') repeat"></div>
-        </ion-scroll>
-        <ion-list>
-            <ion-item ng-repeat="playlist in playlists" href="#/app/playlists/{{playlist.id}}">
-                {{playlist.title}}
-            </ion-item>
-        </ion-list>
+
+        <div class="list card" collection-repeat="playlist in playlists">
+            <div class="item item-body">
+                <img ng-cache class="full-image" src="img/ionic.png">
+            </div>
+            <a class="item">
+                <h3>{{playlist.title}}</h3>
+                <p>{{playlist.title}}</p>
+            </a>
+        </div>
+        <ion-infinite-scroll on-infinite="fetch()" distance="25%" ng-if="!end">
+        </ion-infinite-scroll>
     </ion-content>
 </ion-view>

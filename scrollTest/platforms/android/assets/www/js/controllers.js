@@ -41,17 +41,42 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('PlaylistsCtrl', function ($scope) {
-    $scope.playlists = [
-      { title: 'Reggae', id: 1 },
-      { title: 'Chill', id: 2 },
-      { title: 'Dubstep', id: 3 },
-      { title: 'Indie', id: 4 },
-      { title: 'Rap', id: 5 },
-      { title: 'Cowbell', id: 6 }
-    ];
-})
+.controller('PlaylistsCtrl', function ($scope, $q) {
+    $scope.playlists = [];
+    $scope.end = false;
+    var get = function () {
+        var deferred = $q.defer();
+        setTimeout(function () {
+            deferred.resolve([
+                { title: 'Reggae', id: 1 },
+                { title: 'Chill', id: 2 },
+                { title: 'Dubstep', id: 3 },
+                { title: 'Indie', id: 4 },
+                { title: 'Rap', id: 5 },
+                { title: 'Cowbell', id: 6 }
+            ]);
+        }, 1000);
+        return deferred.promise;
+    };
+    $scope.fetch = function () {
+        if ($scope.end) return;
+        var count = $scope.playlists.length;
+        var params = count ? { "last": $scope.playlists[count - 1].number } : {};
 
+        get()
+            .then(function (playlists) {
+                if (playlists.length)
+                    Array.prototype.push.apply($scope.playlists, playlists);
+                else $scope.end = true;
+            }, function (reason) {
+                console.log('Error loading playlist: ' + reason);
+                $scope.end = true;
+            }).finally(function () {
+                $scope.$broadcast("scroll.infiniteScrollComplete");
+            });
+    };
+    $scope.fetch();
+})
 .controller('PlaylistCtrl', function ($scope, $stateParams) {
 })
 .controller('SearchCtrl', function ($scope, $stateParams) {
